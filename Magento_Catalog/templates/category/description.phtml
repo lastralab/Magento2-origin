@@ -1,0 +1,38 @@
+<?php
+/**
+ * Copyright 2018 Niam Moltta
+ */
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Category view template
+ *
+ * @var $block \Magento\Catalog\Block\Category\View
+ *
+ */
+?>
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$category = $objectManager->get('Magento\Framework\Registry')->registry('current_category');
+$subcats = $category->getChildrenCategories();
+$_helper = $this->helper('Magento\Catalog\Helper\Output');
+$_productList = $category->getProductCollection(); ?>
+<?php if ($_description = $block->getCurrentCategory()->getDescription()) { ?>
+  <h3 class="Category-title" style="font-weight: bold; text-transform: uppercase;"> <?php echo $block->getCurrentCategory()->getName(); ?> </h3><br />
+    <?php if (empty($subcats)) { ?>
+      <div class="product-gallery">
+        <p class="images">
+        <?php foreach ($_productList as $_product): ?>
+          <p> product image should go here </p>
+        <?php endforeach; ?>
+      <br />
+        </div>
+      <?php } ?>
+  <br />
+    <div class="category-description">
+      <p>
+        <?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Output')->categoryAttribute($block->getCurrentCategory(), $_description, 'description') ?> </p>
+    </div>
+    <?php } ?>
