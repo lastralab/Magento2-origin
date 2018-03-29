@@ -1,0 +1,77 @@
+<?php
+/**
+ * Copyright 2018 Niam Moltta
+ * @author Niam Moltta
+ * 
+ */
+use Magento\Framework\App\Action\Action;
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Product list template
+ * @var $block \Magento\Catalog\Block\Category\View
+ * @var $block \Manadev\LayeredNavigation\Blocks\Navigation
+ * @var $block \Magento\Catalog\Block\Product\ListProduct
+ */
+?>
+<?php
+$_productCollection = $block->getLoadedProductCollection();
+$_helper = $this->helper('Magento\Catalog\Helper\Output');
+?>
+<?php if (!$_productCollection->count()): ?>
+    <div class="message info empty"><div><?= /* @escapeNotVerified */ __('We couldn\'t find any products matching the selection.') ?></div></div>
+<?php else: ?>
+    <?= $block->getAdditionalHtml(); ?>
+
+<?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
+  <?php $_cats = array(); ?>
+
+            <?php foreach ($_productCollection as $_product) {
+
+              $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+              $_category= $objectManager->get('Magento\Framework\Registry')->registry('current_category');
+              $categories = $_product->getCategoryIds();
+              if (count($categories)) {
+                foreach($categories as $category) {
+
+                  if (!in_array($category, $_cats)){
+                    $_cats[] = $category;
+                  }
+                }
+             }
+
+        } // ends for each product condition
+
+  //---------------------------- RESULT ------------------------------- ?>
+  <style>
+  .sidebar.side-bar-main, .block.filter.mana-filter-block {
+    display: none;
+  }
+  </style>
+  <div class="results">
+    <p class="items">Items found (<?php echo $iterator = count($_productCollection); ?>)</p><br />
+    <p class"results-title" style="text-align: left;"><h3>Categories matching your selection</h3></p>
+    <br />
+    <ul class="cats" style="list-style-type: none;">
+
+  <?php foreach($_cats as $_cat):
+
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $catFrame = $objectManager->create('Magento\Catalog\Model\Category')->load($_cat);
+    $catname = $catFrame->getName();
+    $caturl = $catFrame->getUrl();
+    $_imgUrl = $catFrame->getImageUrl();
+    $catImg = '<img class="cat" src="'. $_imgUrl.'"/>';
+    echo '<div class="frame" style="margin: 0; padding: 1rem"><li class="cat" style="display:inline; margin: 0;">
+        <a class="cat" href="'.$caturl.'">'.$catImg.'<h3 class="cat" style="width: 20%;">'.$catname.'</h3></a>
+      </li></div>';
+ endforeach; ?>
+</ul></div>
+<?php
+// print_r($_cats);
+
+
+endif; ?>
