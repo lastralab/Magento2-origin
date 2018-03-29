@@ -1,0 +1,181 @@
+<?php
+/**
+ * Copyright 2018 Niam Moltta
+ * See COPYING.txt for license details.
+ */
+use Magento\Framework\App\Action\Action;
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Product list template
+ * @var $block \Magento\Catalog\Block\Category\View
+ * @var $block \Manadev\LayeredNavigation\Blocks\Navigation
+ * @var $block \Magento\Catalog\Block\Product\ListProduct
+ */
+?>
+<?php
+$_productCollection = $block->getLoadedProductCollection();
+$_helper = $this->helper('Magento\Catalog\Helper\Output');
+?>
+<?php if (!$_productCollection->count()): ?>
+    <div class="message info empty"><div><?= /* @escapeNotVerified */ __('We couldn\'t find any products matching the selection.') ?></div></div>
+<?php else: ?>
+  <p class="items">Items found (<?php echo $iterator = count($_productCollection); ?>)</p><br />
+    <?= $block->getToolbarHtml() ?>
+    <?= $block->getAdditionalHtml() ?>
+
+
+  <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
+  <?php
+
+  $headray = array(); // names for a unique headers array
+  $attray = array(); //  row
+  $attributes = array(); // cell
+  $groups = array(); // "Group by" is activated ?>
+
+            <?php foreach ($_productCollection as $_product) {
+
+              $_productNameStripped = $block->stripTags($_product->getName(), null, true);
+
+                  $_attributes = $_product->getAttributes();
+                    $_sku = $_helper->productAttribute($_product, $_product->getData('sku'), 'name');
+                    $attray[] = $_sku;
+                //    $_val = $_helper->productAttribute($_product, $_product->getAttributeText('size'), 'value');  // deactivated for size groups
+
+                  if (!empty($_val)){
+                      $groups[] = $_val; // product has size
+                      }
+
+                  foreach ($_attributes as $_attribute) {
+
+                          $_name = $_attribute->getFrontendLabel();
+
+                          if (!in_array('<th class="sku"><b>Sku</b></th>', $headray)) {
+                                $headray[] = '<th class="sku"><b>Sku</b></th>';
+                              }
+
+                          if ($_attribute->getIsVisibleOnFront()) {
+                            $_value = $_attribute->getFrontend()->getValue($_product);
+
+                            if ($_value == 'No' || $_name == 'Manufacturer') {
+                                continue;
+                              }
+                            elseif ($_name == 'Group By' && $_value != 'No') {
+                                $groups[] = $_value;
+                                $attray[] = $_value;
+                                continue; // product has group by value
+                                }
+                            else {
+                              $head = '<th class="'.$_name.'"><b>'.$_name.'</b></th>';
+                              if (!in_array($head, $headray)) {
+                                $headray[] = $head; // headers
+                                }
+                                $attray[] = $_value; // attributes
+                                }
+                              }
+                            } // ends foreach attribute
+
+          if (!in_array('<th class="addtoquote"><b>&nbsp;</b></th></tr>', $headray)) {
+            $headray[] = '<th class="addtoquote"><b>&nbsp;</b></th></tr>';
+          }
+
+          foreach ($attray as $attr) {
+            // DATA CELLS for each row
+              $attributes[] = '<td>'.$attr.'</td>';
+            }
+
+            $block->getReviewsSummaryHtml($_product);
+            $block->getProductDetailsHtml($_product); ?>
+
+          <?php if ($_product->isSaleable()): ?>
+          <?php $postParams = $block->getAddToCartPostParams($_product);
+          ?>
+          <?php $attributes[] = '<div class="actions-primary"><td><form data-role="tocart-form" data-product-sku="'./* @NoEscape */ $_product->getSku().'" action="'./* @NoEscape */ $postParams['action'].'" method="post"><input type="hidden" name="product" value="'. /* @escapeNotVerified */ $postParams['data']['product'].'"><input type="hidden" name="'. /* @escapeNotVerified */ Action::PARAM_NAME_URL_ENCODED.'" value="'./* @escapeNotVerified */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED].'">'. $block->getBlockHtml('formkey').'<button type="submit"
+          title="'. $block->escapeHtml(__('Add to Quote')).'" class="action tocart primary"><span>'./* @escapeNotVerified */ __('Add to Quote').'</span>
+          </button>
+          </form>
+        </td>
+      </div>
+    </tr>'; // ends adding attributes ?>
+      <?php endif;
+    $_columns = count($attributes)/$iterator;  ?>
+
+  <?php $attray = null;
+  } //end 'for each product' condition ?>
+
+      <?= $block->getToolbarHtml() ?>
+
+        <?php
+
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $category = $objectManager->get('Magento\Framework\Registry')->registry('current_category');
+        $bys = array();
+        $bygroups = implode("-", array_unique($groups));
+
+        foreach (array_unique($groups) as $group) {
+          if (strlen($group) > 1) {
+          $bys[]= $group; // for table to divide by groups
+          }
+        }
+  //---------------------------- TABLE -------------------------------
+
+  if (!empty($bys)) {
+        foreach ($bys as $by) {
+        echo '<p class="group by" style="color: #006738; font-weight: bold; text-transform: uppercase;">'.$_helper->productAttribute($_product, $_product->getAttributeText('manufacturer'), 'value').' - '.$category->getName().' - '.$by.'</p>'?>
+          <div class"products-list">
+            <table class="products" style="width:100%;">
+              <tbody class="products">
+                <tr class= "attributes">
+      <?php
+            $headers = implode("\t", $headray);
+            echo $headers;
+
+      // attributes for each product ordered by group for each table
+
+        $_items = array_chunk($attributes, $_columns); //divides attributes by items
+
+        foreach ($_items as $_item) {
+          $needle = '<td>'.$by.'</td>';
+
+          if (in_array($needle, $_item)) {
+            $k = array_search($needle, $_item);
+            if ($_item[$k] == $needle) { //fix if size is active!
+              unset($_item[$k]);
+              echo implode("\t", $_item);
+              continue;
+            }
+            else {
+              echo implode("\t", $_item);
+            }
+          }
+        }
+           ?>
+          </tbody>
+        </table>
+      </div>
+  <?php }
+}
+    else {
+      echo '<p class="group by" style="color: #006738; font-weight: bold; text-transform: uppercase;">'.$_helper->productAttribute($_product, $_product->getAttributeText('manufacturer'), 'value').' - '.$category->getName().'</p>'; ?>
+      <div class"products-list">
+        <table class="products" style="width:100%;">
+          <tbody class="products">
+            <tr class= "attributes">
+              <?php
+          $headers = implode("\t", $headray);
+          echo $headers;
+          $cells = implode("\t", $attributes);
+          echo $cells; ?>
+      </tbody>
+    </table>
+  </div>
+<?php    }
+
+    // Testing area:
+          //  echo $_columns;
+        // echo $bygroups;
+
+endif; ?>
