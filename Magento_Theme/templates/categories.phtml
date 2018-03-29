@@ -1,0 +1,17 @@
+<?php /* @author Niam Moltta 2018
+/* insert on cms page: {{block class="Magento\Framework\View\Element\Template" template="Magento_Theme::categories.phtml"}} */ ?>
+<br />
+<?php
+	$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+	$categoryFactory = $objectManager->create('Magento\Catalog\Model\ResourceModel\Category\CollectionFactory');
+	$categories = $categoryFactory->create()
+					->addAttributeToSelect('*')
+					->addAttributeToFilter('is_active',1)
+					->addAttributeToFilter('level', 2)
+					->setOrder('position', 'ASC');
+
+	foreach ($categories as $category) :
+		echo '<div class="col-sm-4 col-xs-4 floor">
+					<div class="tape '.$category->getName().'"><a href="'.$category->getUrl().'"><img src="'.$category->getImageUrl().'" style="width: 14rem; height: 14rem;">'.'<h3>'.$category->getName().'</h3></a></div></div>';
+	endforeach;
+?>
