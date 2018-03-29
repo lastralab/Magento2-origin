@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+      <referenceContainer name="page.top">
+            <block class="Magento\Framework\View\Element\Template" name="navigation.sections" before="-" template="Magento_Theme::html/sections.phtml">
+                <arguments>
+                    <argument name="group_name" xsi:type="string">navigation-sections</argument>
+                    <argument name="group_css" xsi:type="string">nav-sections</argument>
+                </arguments>
+                <block class="Magento\Framework\View\Element\Template" name="store.menu" group="navigation-sections" template="Magento_Theme::html/container.phtml">
+                    <arguments>
+                        <argument name="title" translate="true" xsi:type="string">Categories</argument>
+                    </arguments>
+                    <block class="Magento\Theme\Block\Html\Topmenu" name="catalog.topnav" template="Magento_Theme::html/topmenu.phtml" ttl="3600" before="-"/>
+                </block>
+                <block class="Magento\Framework\View\Element\Template" name="store.settings" group="navigation-sections" template="Magento_Theme::html/container.phtml">
+                    <arguments>
+                        <argument name="title" translate="true" xsi:type="string">Settings</argument>
+                    </arguments>
+                    <block class="Magento\Store\Block\Switcher" name="store.settings.language" template="Magento_Store::switch/languages.phtml">
+                        <arguments>
+                            <argument name="id_modifier" xsi:type="string">nav</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceContainer>
+        <referenceBlock name="logo">
+            <arguments>
+                <argument name="logo_file" xsi:type="string">images/logo.svg</argument>
+                <argument name="logo_img_width" xsi:type="number">151</argument>
+                <argument name="logo_img_height" xsi:type="number">71</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="header.links">
+            <block class="Magento\Framework\View\Element\Html\Link\Current" name="home" before="-">
+                <arguments>
+                        <argument name="label" xsi:type="string">Home</argument>
+                        <argument name="title" xsi:type="string">home</argument>
+                        <argument name="path" xsi:type="string"></argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Html\Link\Current" name="how-to-buy" after="home">
+                <arguments>
+                    <argument name="label" xsi:type="string">How To Quote</argument>
+                    <argument name="title" xsi:type="string">how-to-quote</argument>
+                    <argument name="path" xsi:type="string">how-to-quote</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-help" after="how-to-buy">
+                <arguments>
+                    <argument name="label" xsi:type="string">Customer Help</argument>
+                    <argument name="title" xsi:type="string">customer-help</argument>
+                    <argument name="path" xsi:type="string">customer-help</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Html\Link\Current" name="quote" after="customer-help">
+                <arguments>
+                    <argument name="css_class" xsi:type="string">quote</argument>
+                    <argument name="label" xsi:type="string">QUOTE</argument>
+                    <argument name="title" xsi:type="string">quote</argument>
+                    <argument name="path" xsi:type="string">checkout/cart</argument>
+                </arguments>
+            </block>
+          </referenceBlock>
+          <referenceContainer name="catalog.leftnav">
+             <block class="Magento\Cms\Block\Block" name="sidebar" after="page.top" template="Magento_Catalog::category/sidebar.phtml" /> <!-- 24 Mar 2018 -->
+        </referenceContainer>
+        <move element="top.search" after="logo" destination="header-wrapper" />
+        <move element="header.links" after="top.search" destination="header-wrapper" />
+        <move element="minicart" destination="header.links" after="quote"/>
+        <referenceBlock name="register-link" remove="true" />
+        <referenceBlock name="header.panel" remove="true" />
+        <referenceBlock name="form.subscribe" remove="true" />
+        <move element="copyright" destination="footer-container" />
+        <referenceBlock name="footer_links" remove="true"/>
+        <referenceContainer name="footer-container">
+            <container name="footer" as="footer" label="Page Footer" htmlTag="div" htmlClass="footer content">
+                <block class="Magento\Cms\Block\Block" name="footer_content">
+                    <arguments>
+                            <argument name="block_id" xsi:type="string">footer_content</argument>
+                    </arguments>
+                </block>
+                    <block class="Magento\Theme\Block\Html\Footer" name="copyright" template="html/copyright.phtml"/>
+            </container>
+        </referenceContainer>
+        <referenceBlock name="catalog.compare.sidebar" remove="true"/>
+        <referenceBlock name="view.addto.compare" remove="true" />
+        <referenceBlock name="view.addto.wishlist" remove="true" />
+        <move element="Magento_LayeredNavigation" destination="header-wrapper" before="logo"/>
+        <referenceBlock name="page.main.title" remove="true" />
+        <referenceBlock name="customer-account-navigation-address-link" remove="true" />
+        <referenceBlock name="customer-account-navigation-product-reviews-link" remove="true"/>
+        <referenceBlock name="customer-account-navigation-wish-list-link" remove="true"/>
+        <referenceBlock name="customer-account-navigation-billing-agreements-link" remove="true"/>
+        <referenceBlock name="customer-account-navigation-downloadable-products-link" remove="true"/>
+        <referenceBlock name="customer-account-navigation-newsletter-subscriptions-link" remove="true"/>
+        <referenceBlock name="customer-account-navigation-orders-link" remove="true"/>
+        <referenceBlock name="customer-account-navigation-customer-balance-link" remove="true"/>
+        <referenceBlock name="customer-account-navigation-my-credit-cards-link" remove="true"/>
+        <referenceBlock name="customer-account-navigation-account-link" remove="true"/>
+        <referenceBlock name="customer-account-navigation-account-edit-link" remove="true"/>
+    </body>
+</page>
