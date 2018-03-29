@@ -1,0 +1,79 @@
+<?php /* @author Niam Moltta 2018
+/* insert on cms page: {{block class="Magento\Framework\View\Element\Template" template="Magento_Theme::bestsellers.phtml"}} */
+?>
+
+<?php
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $productCollection = $objectManager->create('Magento\Reports\Model\ResourceModel\Report\Collection\Factory');
+    $collection = $productCollection->create('Magento\Sales\Model\ResourceModel\Report\Bestsellers\Collection');
+
+    $collection->setPeriod('year')->load(); // 'day' 'year' 'month'
+    $_categories = array();
+    $_Ids = array();
+    ?>
+    <br />
+    <div class="block widget block-bestseller-products grid">
+            <div class="block-title" style="text-align: center;">
+                <strong aria-level="2" role="heading"><h3 style="text-transform: uppercase;"><b>Best Sellers</b></h3></strong>
+            </div>
+            <br />
+    <div class="block-content">
+      <div class="products-grid grid" style="text-align: center;">
+                    <ol class="product-items widget-bestseller-grid" style="width: 100% !important;">
+    <?php
+    foreach($collection as $product) {
+      $product->getData();
+      $_prodId = $product['product_id'];
+      if (!in_array($_prodId, $_Ids)) {
+        $_Ids[] = $_prodId;
+      }
+    }
+    foreach($_Ids as $_Id) {
+      $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+      $_product = $objectManager->get('Magento\Catalog\Model\Product')->load($_Id);
+      $categories = $_product->getCategoryIds();
+      $_categories = array_merge($_Ids, $categories);
+        }
+    $_cats = array_unique($_categories);
+    $cats = array();
+    $i = 0;
+    foreach($_cats as $_category) {
+
+      $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $_cat = $objectManager->create('Magento\Catalog\Model\Category')->load($_category);
+        $catname = $_cat->getName();
+        if ($catname == '') { continue; }
+        else {
+          $caturl = $_cat->getUrl();
+          $_imgUrl = $_cat->getImageUrl();
+          if($i == 5) { break; }
+        ?>
+                  <li class="product-item">
+                      <div class="product-item-info" style="text-align: center;">
+                            <a href="<?php /* @escapeNotVerified */ echo $caturl ?>" class="product-item-photo">
+                               <img src="<?php echo $_imgUrl ?>" alt="<?php echo $catname ?>" style="width: 100%; height: 100%; padding: 1rem;" />
+                            </a>
+                      <div class="product-item-details" style="text-align: center;">
+                                <strong class="product-item-name">
+                                    <a title="<?php echo $catname ?>"
+                                       href="<?php echo $caturl ?>"
+                                       class="product-item-link">
+                                        <h4 style="text-align: center;"><?php echo $catname ?></h4>
+                                    </a>
+                                              </strong>
+                                            </div>
+                                          </div>
+                                        </li>
+                                      <?php
+                                      $i++;
+                                    }
+                                  } ?>
+                                    </ol>
+                                </div>
+                              </div>
+                          </div>
+          <?php //testing:
+        //  print_r($_cats);
+        //  echo '<br />';
+        //  print_r($categories);
+          ?>
