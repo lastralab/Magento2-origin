@@ -1,16 +1,19 @@
 <?php
 /**
- * Copyright 2018 Niam Moltta
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 // @codingStandardsIgnoreFile
 
 ?>
 <?php
 /**
- * Category view template
- *
+ * templates
+ * @var $block \Magento\Catalog\Block\Product\Image
  * @var $block \Magento\Catalog\Block\Category\View
- *
+ * @var $block \Manadev\LayeredNavigation\Blocks\Navigation
+ * @var $block \Magento\Catalog\Block\Product\ListProduct
+ * @var \Magento\Catalog\Block\Product\Gallery $block
  */
 ?>
 <?php
@@ -20,17 +23,37 @@ $subcats = $category->getChildrenCategories();
 $_helper = $this->helper('Magento\Catalog\Helper\Output');
 $_productList = $category->getProductCollection(); ?>
 <?php if ($_description = $block->getCurrentCategory()->getDescription()) { ?>
-  <h3 class="Category-title" style="font-weight: bold; text-transform: uppercase;"> <?php echo $block->getCurrentCategory()->getName(); ?> </h3><br />
-    <?php if (empty($subcats)) { ?>
-      <div class="product-gallery">
-        <p class="images">
-        <?php foreach ($_productList as $_product): ?>
-          <p> product image should go here </p>
-        <?php endforeach; ?>
-      <br />
-        </div>
+  <h3 class="category-title" style="font-weight: bold; text-transform: uppercase;"> <?php echo $block->getCurrentCategory()->getName(); ?> </h3><br />
+    <?php if (empty($subcats)) {
+   $_imarray = array(); ?>
+        <?php foreach ($_productList as $_product):
+          $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+          $_imagehelper = $this->helper('Magento\Catalog\Helper\Image');
+          $product = $objectManager->create('Magento\Catalog\Model\Product')->load($_product->getId());
+          $images = $product->getMediaGalleryImages();
+          $i = 0;
+                foreach ($images as $child) {
+                  $i++;
+                  $imageUrl = $_imagehelper->init($product, 'product_page_image_large')->setImageFile($child->getFile())->constrainOnly(FALSE)->keepAspectRatio(TRUE)->keepFrame(TRUE)->resize(324,212)->getUrl();
+                  
+                $_imarray[] = $imageUrl;
+              } // ends for each image
+              ?>
+          <?php  endforeach; // ends for each product
+          foreach ($_imarray as $image) { ?>
+              <img data-id="smallthumbs" src="<?php echo $image ?>"/>
+            <?php } ?>
+              <?php if ($block->getPreviousImageUrl() || $block->getNextImageUrl()): ?>
+                  <div class="nav">
+                    <?php if ($_prevUrl = $block->getPreviousImageUrl()): ?>
+                        <a href="<?= /* @escapeNotVerified */ $_prevUrl ?>" class="prev">&laquo; <?= /* @escapeNotVerified */ __('Prev') ?></a>
+                    <?php endif; ?>
+                    <?php if ($_nextUrl = $block->getNextImageUrl()): ?>
+                        <a href="<?= /* @escapeNotVerified */ $_nextUrl ?>" class="next"><?= /* @escapeNotVerified */ __('Next') ?> &raquo; </a>
+                    <?php endif; ?>
+                  </div>
+              <?php endif;  ?>
       <?php } ?>
-  <br />
     <div class="category-description">
       <p>
         <?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Output')->categoryAttribute($block->getCurrentCategory(), $_description, 'description') ?> </p>

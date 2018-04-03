@@ -1,7 +1,7 @@
- 
- <?php
+<?php
 /**
-* Copyright 2018 Niam Moltta
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
@@ -20,14 +20,20 @@ $category = $objectManager->get('Magento\Framework\Registry')->registry('current
 $subcats = $category->getChildrenCategories();
 $_helper = $this->helper('Magento\Catalog\Helper\Output');
 ?>
-<?php if (!empty($subcats)) : ?>
+<?php if (empty(count($subcats))) {
+          if (!$block->isContentMode() || $block->isMixedMode()): ?>
+          <div>
+            <?= $block->getProductListHtml() ?>
+          </div>
+        <?php endif;  } ?>
+<?php if (!empty(count($subcats))) : ?>
   <style>
   .sidebar.side-bar-main, .block.filter.mana-filter-block {
     display: none;
   }
   </style>
   <div class="subcategories">
-    <p class"subcategories-title"><h3> Subcategories </h3></p>
+    <p class="subcategories-title"><h3> Subcategories </h3></p>
     <ul class="sub-cat" style="list-style-type: none;">
       <?php
       foreach ($subcats as $subcat) {
@@ -46,9 +52,3 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
           <?php } ?>
   </ul></div>
 <?php endif; ?>
-<?php if (empty($subcats)) {
-          if (!$block->isContentMode() || $block->isMixedMode()): ?>
-          <div>
-            <?= $block->getProductListHtml() ?> <!--calls list.phtml-->
-          </div>
-        <?php endif;  } ?>
