@@ -1,7 +1,6 @@
 <?php
 /**
- * Copyright 2018 Niam Moltta
- * See COPYING.txt for license details.
+ * Copyright © 2018 L'Astra Lab.
  */
 use Magento\Framework\App\Action\Action;
 
@@ -31,10 +30,10 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
   <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
   <?php
 
-  $headray = array(); // names for a unique headers array
-  $attray = array(); //  row
-  $attributes = array(); // cell
-  $groups = array(); // "Group by" is activated ?>
+  $headray = array(); // Names for a unique headers array
+  $attray = array(); //  Row of attributes
+  $attributes = array(); // Cell for each attribute
+  $groups = array(); // "Group by" is activated (this custom attribute helps to keep each group separated, each group having its own table)?>
 
             <?php foreach ($_productCollection as $_product) {
 
@@ -43,10 +42,10 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                   $_attributes = $_product->getAttributes();
                     $_sku = $_helper->productAttribute($_product, $_product->getData('sku'), 'name');
                     $attray[] = $_sku;
-                //    $_val = $_helper->productAttribute($_product, $_product->getAttributeText('size'), 'value');  // deactivated for size groups
+                    $_val = $_helper->productAttribute($_product, $_product->getAttributeText('size'), 'value');  // deactivated for size groups, uncomment to activate: This will list products on tables by size if they have that attribute, and if they don't have the 'Group By' custom attribute activated.
 
                   if (!empty($_val)){
-                      $groups[] = $_val; // product has size
+                      $groups[] = $_val; // product has size and function is activated.
                       }
 
                   foreach ($_attributes as $_attribute) {
@@ -57,11 +56,11 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
                                 $headray[] = '<th class="sku"><b>Sku</b></th>';
                               }
 
-                          if ($_attribute->getIsVisibleOnFront()) {
+                          if ($_attribute->getIsVisibleOnFront()) { // attributes must be visible on front
                             $_value = $_attribute->getFrontend()->getValue($_product);
 
                             if ($_value == 'No' || $_name == 'Manufacturer') {
-                                continue;
+                                continue; // Ignores empty values and manufacturer
                               }
                             elseif ($_name == 'Group By' && $_value != 'No') {
                                 $groups[] = $_value;
@@ -117,14 +116,14 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
 
         foreach (array_unique($groups) as $group) {
           if (strlen($group) > 1) {
-          $bys[]= $group; // for table to divide by groups
+          $bys[]= $group; // Tables divided by groups
           }
         }
-  //---------------------------- TABLE -------------------------------
+  //---------------------------- TABLE(S) -------------------------------
 
-  if (!empty($bys)) {
+  if (!empty(count($bys))) {
         foreach ($bys as $by) {
-        echo '<p class="group by" style="color: #006738; font-weight: bold; text-transform: uppercase;">'.$_helper->productAttribute($_product, $_product->getAttributeText('manufacturer'), 'value').' - '.$category->getName().' - '.$by.'</p>'?>
+        echo '<p class="group by" style="color: #b2970e; font-weight: bold; text-transform: uppercase;">'.$_helper->productAttribute($_product, $_product->getAttributeText('manufacturerbis'), 'value').' - '.$category->getName().' - '.$by.'</p>'// 'manufacturer' should work if attribute is not custom added ?>
           <div class"products-list">
             <table class="products" style="width:100%;">
               <tbody class="products">
@@ -142,7 +141,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
 
           if (in_array($needle, $_item)) {
             $k = array_search($needle, $_item);
-            if ($_item[$k] == $needle) { //fix if size is active!
+            if ($_item[$k] == $needle) { // Comment lines if size is activated! otherwise the size column will be deleted from table
               unset($_item[$k]);
               echo implode("\t", $_item);
               continue;
@@ -159,7 +158,7 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
   <?php }
 }
     else {
-      echo '<p class="group by" style="color: #006738; font-weight: bold; text-transform: uppercase;">'.$_helper->productAttribute($_product, $_product->getAttributeText('manufacturer'), 'value').' - '.$category->getName().'</p>'; ?>
+      echo '<p class="group by" style="color: #b2970e; font-weight: bold; text-transform: uppercase;">'.$_helper->productAttribute($_product, $_product->getAttributeText('manufacturerbis'), 'value').' - '.$category->getName().'</p>'; // 'manufacturer' should work if attribute is not custom added ?>
       <div class"products-list">
         <table class="products" style="width:100%;">
           <tbody class="products">
@@ -177,5 +176,5 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
     // Testing area:
           //  echo $_columns;
         // echo $bygroups;
-
+        //print_r($attributes);
 endif; ?>
