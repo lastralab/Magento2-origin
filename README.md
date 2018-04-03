@@ -10,8 +10,7 @@ Handful whims and a <a href="https://homosostenible.blogspot.mx/2018/03/objetos-
 ## <a href="https://github.com/lastralab/Magento2.2.2/blob/master/Magento_Catalog/templates/category/products.phtml"> products.phtml</a><br>
 **Display product list only when there are no more subcategories to reveal.**
 <br><br>
-<img width="100%" alt="subcategories" src="https://user-images.githubusercontent.com/22894897/38229556-8ec0f722-36c6-11e8-884b-5295c46ba63d.png"><br><br>
-<img width="100%" alt="subcategories" src="https://user-images.githubusercontent.com/22894897/38229553-8e5ad000-36c6-11e8-9d03-29f13db5d593.png">
+<img width="100%" alt="subcategories" src="https://user-images.githubusercontent.com/22894897/38229556-8ec0f722-36c6-11e8-884b-5295c46ba63d.png">
 <br><br>
 ## <a href="https://github.com/lastralab/Magento2.2.2/blob/master/Magento_Catalog/templates/product/list.phtml"> list.phtml</a><br>
 **Display products list on separate tables, each table for a custom group.**
