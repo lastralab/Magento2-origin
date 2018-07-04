@@ -27,7 +27,7 @@ Handful whims and a <a href="https://homosostenible.blogspot.mx/2018/03/objetos-
 <br><br>
 <img width="100%" alt="openlayared" src="https://user-images.githubusercontent.com/22894897/38230131-9efa5a90-36c9-11e8-852e-26226dea8ccd.png">
 <br><br>
-## <a href="https://github.com/lastralab/Magento2.2.2/blob/master/Manadev_LayeredNavigation/view-Magento_luma/frontend/templates/mexico_states.sql"> navigation.phtml</a><br>
+## <a href="https://github.com/lastralab/Magento2.2.2/blob/master/Manadev_LayeredNavigation/view-Magento_luma/frontend/templates/mexico_states.sql"> mexico_states.sql </a><br>
 **Add Mexico States for dropdown options in Checkout.**
 <br><br>
 <img height="400px" alt="estados unidos mexicanos" src="https://user-images.githubusercontent.com/22894897/42291440-d42c4ef0-7f88-11e8-94ea-94ae2d990a8e.png">
