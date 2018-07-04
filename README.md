@@ -30,5 +30,5 @@ Handful whims and a <a href="https://homosostenible.blogspot.mx/2018/03/objetos-
 ## <a href="https://github.com/lastralab/Magento2.2.2/blob/master/Manadev_LayeredNavigation/view-Magento_luma/frontend/templates/mexico_states.sql"> navigation.phtml</a><br>
 **Add Mexico States for dropdown options in Checkout.**
 <br><br>
-<img height="500px" alt="estados unidos mexicanos" src="https://user-images.githubusercontent.com/22894897/42291440-d42c4ef0-7f88-11e8-94ea-94ae2d990a8e.png">
+<img height="400px" alt="estados unidos mexicanos" src="https://user-images.githubusercontent.com/22894897/42291440-d42c4ef0-7f88-11e8-94ea-94ae2d990a8e.png">
 <br><br>
