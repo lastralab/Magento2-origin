@@ -1,1 +1,119 @@
+<!--@subject Geedop Quote Confirmation @-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <style type="text/css">
+        {{var template_styles|raw}}
 
+        {{css file="css/email.css"}}
+    </style>
+</head>
+<body>
+{{inlinecss file="css/email-inline.css"}}
+
+<!-- Begin wrapper table -->
+<table class="wrapper" width="100%">
+    <tr>
+        <td class="wrapper-inner" align="center">
+            <table class="main" align="center">
+                <tr>
+                    <td class="header">
+                        <a class="logo" href="{{store url=""}}">
+                            <img
+                                {{if logo_width}}
+                                    width="{{var logo_width}}"
+                                {{else}}
+                                    width="180"
+                                {{/if}}
+
+                                {{if logo_height}}
+                                    height="{{var logo_height}}"
+                                {{else}}
+                                    height="52"
+                                {{/if}}
+
+                                src="http://test.geedop.com/wp-content/uploads/2017/10/geedop-logo-01.png"
+                                alt="{{var logo_alt}}"
+                                border="0"
+                            />
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="main-content">
+                    <!-- Begin Content -->
+
+ <h4><b>Contact Information</b></h4>
+
+ <table>
+   <tr>
+     <td>
+       <b>Company:</b> {{var company}}
+     </td>
+   </tr>
+   <tr>
+     <td>
+       <b>Name:</b> {{var name}}
+     </td>
+   </tr>
+   <tr>
+     <td>
+       <b>Email:</b> {{var email}}
+     </td>
+   </tr>
+
+   <tr>
+     <td>
+       <b>Address1: </b>{{var address1}}
+     </td>
+   </tr>
+   <tr>
+     <td>
+       <b>Address2:</b> {{var address2}}
+     </td>
+   </tr>
+   <tr>
+     <td>
+       <b>City:</b> {{var city}}
+     </td>
+   </tr>
+   <tr>
+     <td>
+       <b>State:</b> {{var state}}
+     </td>
+   </tr>
+   <tr>
+     <td>
+       <b>Zip Code:</b> {{var zipcode}}
+     </td>
+   </tr>
+   <tr>
+     <td>
+       <b>Country: </b>{{var country}}
+     </td>
+   </tr>
+   <tr>
+     <td>
+       <b>Message: </b>{{var comment}}
+     </td>
+   </tr>
+ </table>
+ <h4><b>Items</b></h4>
+  {{block class="\Magento\Framework\View\Element\Template" template="Moltta_OneStep::form.phtml"}}
+ <!-- End Content -->
+</td>
+</tr>
+<tr>
+  <td class="footer">
+    <p class="closing">Geedop, LLC</p>
+  </td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<!-- End wrapper table -->
+</body>
