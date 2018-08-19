@@ -1,1 +1,41 @@
-
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+  <head>
+    <title>Quote Request</title>
+  </head>
+  <update handle="checkout_cart_item_renderers"/>
+  <body>
+    <referenceContainer name="content">
+              <block class="Magento\Checkout\Block\Cart" name="checkout.cart" template="cart.phtml" cacheable="false">
+                  <container name="checkout.cart.items" as="with-items">
+                    <!-- ******* onestep -->
+                      <block class="Moltta\OneStep\Block\Page\View" name="onestep" before="checkout.cart.container" template="Moltta_OneStep::onestep.phtml">
+                      </block>
+                      <!-- ******* onestep -->
+                  </container>
+                  <container name="checkout.cart.noitems" as="no-items">
+                      <block class="Magento\Checkout\Block\Cart" name="checkout.cart.empty" before="-" template="cart/noItems.phtml">
+                          <container name="checkout.cart.empty.widget" as="checkout_cart_empty_widget" label="Empty Shopping Cart Content Before"/>
+                      </block>
+                  </container>
+              </block>
+    </referenceContainer>
+          <referenceBlock name="breadcrumbs">
+              <action method="addCrumb">
+                  <argument name="crumbName" xsi:type="string">Home</argument>
+                  <argument name="crumbInfo" xsi:type="array">
+                      <item name="title" xsi:type="string">Home</item>
+                      <item name="label" xsi:type="string">Home</item>
+                      <item name="link" xsi:type="string">/</item>
+                  </argument>
+              </action>
+              <action method="addCrumb">
+                  <argument name="crumbName" xsi:type="string">Quote Request</argument>
+                  <argument name="crumbInfo" xsi:type="array">
+                      <item name="title" xsi:type="string">Quote Request</item>
+                      <item name="label" xsi:type="string">Quote Request</item>
+                  </argument>
+              </action>
+          </referenceBlock>
+    </body>
+</page>
