@@ -64,8 +64,8 @@ class Post extends \Magento\Framework\App\Action\Action
             $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
 
             $sender = [
-                'name' => 'Sales Representative', /* Sender name */
-                'email' => 'tmolina.geedop@gmail.com', /* Admin email, the one already logged in */
+                'name' => 'Sales Representative', /* Sender name, optional */
+                'email' => 'example@.gmail.com', /* Admin email, optional */
             ];
 
             $sentToEmail = $this->_scopeConfig ->getValue('trans_email/ident_general/email',\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
