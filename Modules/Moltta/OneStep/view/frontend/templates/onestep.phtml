@@ -1,0 +1,288 @@
+<?php
+/**
+ * Custom by @copyright © 2018 L'Astra Lab.
+ * @author Niam Moltta */
+
+ // @codingStandardsIgnoreFile
+
+ /**  @var $block \Magento\Checkout\Block\Cart\Grid */
+?>
+<?php
+include 'hands/countries.php';
+$countriesList = $countries;
+$statesMX = $MEXStates;
+$statesUS = $USAStates;
+$it = 0;
+?>
+<br />
+<br />
+<h3 class="quote-title" style="margin-top:-1rem!important;margin-bottom:2rem!important;margin-left:3rem!important;text-align:left!important;color:#006738;"> Quote Request </h3>
+<div class="quote-container" style="width:100%!important;padding:1rem 2rem;">
+  <form action="<?php echo $block->getBaseUrl().'onestep/page/post/';?>" style="display:inline" name="customemaildata" method="post" id="contactForm-1" data-hasrequired="<?php echo __('* Required Fields') ?>" data-mage-init='{"validation":{}}'>
+    <div class="quote-items" style="width:49%;display:inline">
+
+      <?php
+      $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+      $cart = $objectManager->get('\Magento\Checkout\Model\Cart');
+      $itemsCollection = $cart->getQuote()->getItemsCollection();
+      $itemsVisible = $cart->getQuote()->getAllVisibleItems();
+      $items = $cart->getQuote()->getAllItems(); ?>
+      <table style="margin-top:-2rem">
+        <tr>
+          <td width="50%" style="vertical-align:top!important">
+            <table>
+              <tr>
+                <td>
+                  <b style="margin-left:-1rem;text-transform:uppercase;font-size:14px">Product</b>
+                </td>
+                <td style="text-align:center">
+                  <b style="text-transform:uppercase;font-size:14px">Quantity</b>
+                </td>
+              </tr>
+
+              <?php
+                foreach($items as $item) {
+                    $pro_Id = $item->getProductId();
+                    $_product = $objectManager->get('Magento\Catalog\Model\Product')->load($item->getProductId());
+                    $_imagehelper = $objectManager->get('\Magento\Catalog\Helper\Image');
+                    $product = $item->getProduct();
+                    $qty = $item->getQty();
+                    $img = $_imagehelper->init($product,'category_page_list',array('height' => '100' , 'width'=> '100'))->getUrl();
+                    $sku = $_product->getSku();
+                    $data = $item->getItemHtml();
+                    echo '<input type="hidden" name="item['.$it.'][name]" value="'.htmlspecialchars($_product->getName()).'"/>';
+                    echo '<input type="hidden" name="item['.$it.'][sku]" value="'.htmlspecialchars($_product->getSku()).'"/>';
+                    echo '<input type="hidden" name="item['.$it.'][img]" value="'.htmlspecialchars($img).'"/>';
+                    ?>
+            <tr>
+              <td style="padding-top:2rem" width="70%">
+                <table style="margin-left:-1.2rem!important">
+                  <tr>
+                    <td width="35%">
+                <input type="hidden" name="product" value="<?= /* @escapeNotVerified */ $_product->getId() ?>" />
+                      <?= $block->getBlockHtml('formkey') ?>
+                      <?= $block->getChildHtml('form_top') ?>
+                      <?php if (!$block->hasOptions()):?>
+                          <?= $block->getChildHtml('product_info_form_content') ?>
+                      <?php else:?>
+                          <?php if ($_product->isSaleable() && $block->getOptionsContainer() == 'container1'):?>
+                              <?= $block->getChildChildHtml('options_container') ?>
+                          <?php endif; ?>
+                      <?php endif; ?>
+
+                      <?php if ($_product->isSaleable() && $block->hasOptions() && $block->getOptionsContainer() == 'container2'):?>
+                          <?= $block->getChildChildHtml('options_container') ?>
+                      <?php endif;?>
+                      <?= $block->getChildHtml('form_bottom') ?>
+                <div class="photo" style="padding:1rem;margin-left: -1rem;text-align:left;max-width:130px;height:auto;border: 7px solid #ebebeb">
+                    <img src="<?= $img ?>"/>
+                </div>
+              </td>
+              <td width="65%" style="vertical-align:top!important">
+                <div class="box-tocart" style="text-align:left">
+
+                  <h2 class="product-name" style="font-size:1.5rem!important;margin:0 1rem 0 0rem;"><b><?php echo $_product->getName() ?></b></h2>
+                  <div class="sku-popup"><span class="sku-popup" style="text-align: left;margin-left:0rem">SKU: <?php echo $_product->getSku() ?></span></div><br />
+                </div>
+                <?php // Remove item button ?>
+                <?= $block->getChildHtml('checkout.cart.order.actions') ?>
+                <?= $block->getChildHtml('shopping.cart.table.after') ?>
+                <a style="color:#777; text-decoration:underline" href="#" title="<?php echo $block->escapeHtml(__('Remove item')); ?>" class="action action-delete" data-post='<?php echo $this->helper('Magento\Checkout\Helper\Cart')->getDeletePostJson($item) ?>'>
+                  <span><?php echo __('Remove')?></span>
+                </a>
+              </td>
+            </tr>
+          </table>
+              </td>
+              <td style="vertical-align:top;padding-top:2rem" width="35%">
+                <?php
+                  $valto = $qty;
+                  ?>
+                <div class="field qty" style="text-align:left">
+
+                    <div class="control">
+                          <input type="number"
+                               name="item[<?=$it?>][qty]"
+                               id="<?=$sku?>-qty"
+                               class="qty"
+                               value="<?= $valto ?>"
+                               title="<?= /* @escapeNotVerified */ __('Qty') ?>"
+                               class="input-text qty"
+                               data-validate="<?= $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
+                               style="border: 1px solid #8d8d8d!important;margin-left:44px;width:82px!important;display:inline;text-align:center;max-height:27px;border-radius:3px"
+                               />
+
+                          <div class="button-container" style="display:inline">
+
+                            <button class="<?=$sku?>-qty-minus" type="button" value="-" style="margin-bottom:1px!important;background-color: #ebebeb;color:#8d8d8d;border:1px solid #8d8d8d;margin-left:-115px;margin-right:76px;padding:0.5rem 1.2rem;max-height:27px">-</button>
+                            <button class="<?=$sku?>-qty-plus" type="button" value="+" style="margin-bottom:1px!important;background-color: #ebebeb;color:#8d8d8d;border:1px solid #8d8d8d;padding:0.5rem 1.2rem;max-height:27px">+</button>
+                          </div>
+                    </div>
+                </div>
+
+          <script type="text/x-magento-init">
+              {
+                  "#product_addtocart_form": {
+                      "Magento_Catalog/js/validate-product": {
+                        "bindSubmit": true
+                      }
+                  }
+              }
+          </script>
+          <script type="text/x-magento-init">
+                  {
+                          "[data-role=tocart-form], .form.map.checkout": {
+                              "catalogAddToCart": {
+                                 "bindSubmit": true
+                               }
+                          }
+                      }
+          </script>
+          <script type="text/javascript">
+          require(['jquery'], function($) {
+             $(document).ready(function() {
+                var incrementPlus;
+                var incrementMinus;
+
+                var buttonPlus  = $(".<?=$sku?>-qty-plus");
+                var buttonMinus = $(".<?=$sku?>-qty-minus");
+
+                var incrementPlus = buttonPlus.click(function() {
+                	var $n = $(this)
+                    .parent(".button-container")
+          		      .parent(".control")
+                		.find(".qty");
+                	$n.val(Number($n.val())+1 );
+                });
+                var incrementMinus = buttonMinus.click(function() {
+                		var $n = $(this)
+                    .parent(".button-container")
+          		      .parent(".control")
+                		.find(".qty");
+                	var amount = Number($n.val());
+                	if (amount > 1) {
+                		$n.val(amount-1);
+                	}
+                });
+              });
+          });
+          </script>
+      </td>
+    </tr>
+<?php
+  $it++;
+  }
+?>
+</table>
+</div>
+</td>
+<td width="50%" style="vertical-align: top">
+<div class="shipping-info" style="width:49%;padding:0 2rem!important;display:inline">
+
+    <fieldset class="fieldset">
+      <legend class="legend" style="border-bottom:none!important;font-size:16px;font-family:Helvetica;margin-bottom:1rem;margin-top:-1.25rem"><span><?= $block->escapeHtml(__('Enter your contact information and destination below:')) ?> </span></legend>
+      <div class="field email required" style="width:48%;margin-right:10px;margin-bottom:10px;display:inline-block;border-radius: 6px;">
+
+          <div class="control">
+              <select style="border-radius: 6px;border:2px solid #ccc" name="country" id="country" title="<?php echo __('Country') ?>" class="select" value=""
+              method="post" data-validate="{required:true}">
+              <option class="red" value="Country" selected="true" disabled="true">Country</option>
+                    <?php echo $countriesList; ?>
+              </select>
+          </div>
+      </div>
+            <div class="field email required" style="width:48%;margin-right:10px;margin-bottom:10px;display:inline-block;border-radius: 6px;">
+
+                <div class="control">
+                    <input name="name" id="name" title="<?php echo __('Name') ?>" class="input-text" type="text" data-validate="{required:true}" placeholder="Name" style="border-color: #ccc;opacity:1!important"/>
+                </div>
+            </div>
+            <div class="field email required" style="width:48%;margin-right:10px;margin-bottom:10px;display:inline-block;border-radius: 6px;">
+
+                <div class="control">
+                    <input name="email" id="email" placeholder="Email Address" title="<?php echo __('Email') ?>" class="input-text" type="email" data-validate="{required:true, 'validate-email':true}" style="border-color: #ccc;opacity:1!important"/>
+                </div>
+            </div>
+            <div class="field email required" style="width:48%;margin-right:10px;margin-bottom:10px;display:inline-block;border-radius: 6px;">
+
+                <div class="control">
+                    <input name="company" id="company" placeholder="Company" title="<?php echo __('Company') ?>" class="input-text" type="text" data-validate="{required:true}" style="border-color: #ccc;opacity:1!important"/>
+                </div>
+            </div>
+            <div class="field email required" style="display:inline-block;border-radius: 6px;width:98%;margin-right:10px;margin-bottom:10px;">
+
+                <div class="control">
+                    <input name="address1" id="address1" placeholder="Address 1" title="<?php echo __('Address1') ?>" class="input-text" type="text" data-validate="{required:true}" style="border-color: #ccc;opacity:1!important"/>
+                </div>
+            </div>
+            <div class="field email" style="display:inline-block; width:98%;margin-right:10px;margin-bottom:10px;">
+
+                <div class="control">
+                    <input name="address2" id="address2" placeholder="Address 2" title="<?php echo __('Address2') ?>" class="input-text" type="text" style="border-radius:6px;border: 2px solid #ccc;opacity:1!important"/>
+                </div>
+            </div>
+            <div class="field email required" style="display:inline-block;border-radius: 6px; width:34%;margin-right:10px;margin-bottom:10px;">
+
+                <div class="control">
+                    <input name="city" id="city" placeholder="City" data-validate="{required:true}" title="<?php echo __('City') ?>" class="input-text" type="text" style="border-color: #ccc;opacity:1!important"/>
+                </div>
+            </div>
+            <div class="field email required" style="display:inline-block;border-radius: 6px; width:34%;margin-right:10px;margin-bottom:10px;">
+
+                <div class="control">
+                    <select name="state" id="state" placeholder="State" data-validate="{required:true}" title="<?php echo __('State') ?>" class="select" type="text" style="border-radius: 6px;border: 2px solid #ccc;opacity:1!important">
+                      <option class="red" value="State" selected="true" disabled="true">State</option>
+                    <?= $statesUS.$statesMX ?>
+                  </select>
+                </div>
+            </div>
+            <div class="field email required" style="display:inline-block;border-radius: 6px; width:26%;margin-right:10px;margin-bottom:10px;">
+
+                <div class="control">
+                    <input name="zipcode" id="zipcode" placeholder="Zip Code" data-validate="{required:true}" title="<?php echo __('Zip Code') ?>" class="input-text" type="text" style="border-color: #ccc;opacity:1!important"/>
+                </div>
+            </div>
+            <div class="field email required" style="display:inline-block;border-radius: 6px;width:98%;margin-right:10px;margin-bottom:10px;">
+
+                <div class="control">
+                    <textarea name="comment" id="comment" placeholder="Message" title="<?php echo __('Message') ?>" class="input-text" cols="5" rows="6" data-validate="{required:true}" style="border-color: #ccc;opacity:1!important;border-radius: 6px;"></textarea>
+                </div>
+            </div>
+    </fieldset>
+
+    <div class="actions-toolbar" style="display:inline;float:right;margin-top:-4rem">
+      <table class="submit-section">
+        <tr>
+          <td>
+            <div class="checkbox" style="display:inline:float:right">
+              <input type="checkbox" value="send" id="copy" name="copy"/><label for="email">Send me a copy</label>
+            </div>
+          </td>
+          <td>
+            <div class="primary">
+              <input type="hidden" name="hideit" id="hideit" value=""/>
+              <button type="submit" title="<?php echo __('Submit') ?>" class="action submit primary" style="border-radius:0!important;padding:1rem 4rem;text-transform:uppercase;font-weight:normal;margin-right:0">
+                  <span><?php echo __('Submit Quote Request') ?></span>
+                </button>
+              </div>
+            </td>
+      </table>
+        <br />
+        <br />
+    </div>
+</div>
+</td>
+</tr>
+</table>
+</form>
+</div>
+<br />
+<br />
+<script type="text/javascript">
+require(['jquery'], function($) {
+   $(document).ready(function() {
+     /* checkbox uncheck */
+      $('#copy').prop('checked', false);
+    });
+});
+</script>

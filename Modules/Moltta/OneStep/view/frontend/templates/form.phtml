@@ -1,1 +1,24 @@
-
+<?php
+/**
+ * @copyright © 2018 L'Astra Lab.
+ * @author Niam Moltta */
+?>
+<?php /* Items Table for Quote Request */ ?>
+<?php $t = 0; // total of items
+foreach($_POST['item'] as $q) {
+        $qty = intval($q['qty']);
+        $t = $t + $qty;
+}
+?>
+<table>
+<?php // items info including image
+ foreach($_POST['item'] as $item) {
+      echo '<tr><td width="90px"><img src="'.$item['img'].'" width="70px"/></td><td>&nbsp;&nbsp;&nbsp;<b>'.$item['name'].'</b><br>&nbsp;&nbsp;&nbsp;<b>Sku: </b>'.$item['sku'].'<br>&nbsp;&nbsp;&nbsp;<b>Qty: </b>'.$item['qty'].'</td></tr><tr><td>&nbsp;</td></tr>';
+}
+?>
+<tr>
+  <td>
+    Total = <?php echo $t; ?>
+  </td>
+</tr>
+</table>
