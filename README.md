@@ -1,6 +1,6 @@
 # Magento2.2.2
 
-Handful whims and a <a href="https://github.com/lastralab/Magento2.2.2/raw/master/Magento2_Guides.pdf">quick guide</a> to play with Magento 2.2.2
+Handful whims and <a href="https://github.com/lastralab/Magento2.2.2/raw/master/Magento2_Guides.pdf">quick guide</a> to play with Magento 2.2.2
 
 ## <a href="https://github.com/lastralab/Magento2.2.2/blob/master/Magento_Theme/templates/categories.phtml"> categories.phtml</a><br>
 **A static block of categories.**
