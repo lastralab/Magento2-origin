@@ -1,18 +1,22 @@
-hidePopup: function () {
-            var defaultSearchBlock = this.showPopup(),
-                inputWrapper = '[data-amsearch-js="search-wrapper-input"]';
+'use strict';
 
-            if (this.autoComplete.is(':hidden')) {
-                this.searchLabel.removeClass('active');
-            }
+    $.widget('mage.amXsearchFormMini', $.mage.quickSearch, {
+            hidePopup: function () {
+                        var defaultSearchBlock = this.showPopup(),
+                            inputWrapper = '[data-amsearch-js="search-wrapper-input"]';
 
-            this.autoComplete.hide();
-            $('[data-amsearch-js="overlay"], [data-amsearch-js="close"], [data-amsearch-js="loupe"]').hide();
-            this.searchForm.find('.input-text').attr('placeholder', $.mage.__('Search entire store here...'));
-            this.searchForm.removeClass('-opened');
+                        if (this.autoComplete.is(':hidden')) {
+                            this.searchLabel.removeClass('active');
+                        }
 
-            if (this.windowWidth >= this.mobileView) {
-                $(inputWrapper).css('width', '100%');
-                this.searchForm.find('.search-autocomplete').css('width', defaultSearchBlock);
-            }
-        }
+                        this.autoComplete.hide();
+                        $('[data-amsearch-js="overlay"], [data-amsearch-js="close"], [data-amsearch-js="loupe"]').hide();
+                        this.searchForm.find('.input-text').attr('placeholder', $.mage.__('Search entire store here...'));
+                        this.searchForm.removeClass('-opened');
+
+                        if (this.windowWidth >= this.mobileView) {
+                            $(inputWrapper).css('width', '100%');
+                            this.searchForm.find('.search-autocomplete').css('width', defaultSearchBlock);
+                        }
+                    }
+    }
